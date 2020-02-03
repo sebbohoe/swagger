@@ -1,0 +1,887 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Center API",
+    "description": "This API will be used to serve different numbers for different shopping malls and centers managed by ECE",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "sebastian.hoenig@ece.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "servers": [
+    {
+      "url": "http://dia-center.westeurope.cloudapp.azure.com/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "center",
+      "description": "Everything about centers"
+    },
+    {
+      "name": "tenant",
+      "description": "Everything about tenants"
+    },
+    {
+      "name": "flat",
+      "description": "Everything about flats"
+    },
+    {
+      "name": "sensor",
+      "description": "Everything about sensors"
+    }
+  ],
+  "paths": {
+    "/centers": {
+      "get": {
+        "tags": [
+          "center"
+        ],
+        "summary": "Get a list of all centers",
+        "operationId": "getAllCenters",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Center"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid url supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "URL not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/centers/{centerId}": {
+      "get": {
+        "tags": [
+          "center"
+        ],
+        "summary": "Find a center by ID/shortcut",
+        "description": "Returns a single center",
+        "operationId": "getCenterById",
+        "parameters": [
+          {
+            "name": "centerId",
+            "in": "path",
+            "description": "ID of center to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Center"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Center not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/centers/{centerId}/tenants": {
+      "get": {
+        "tags": [
+          "tenant"
+        ],
+        "summary": "Get a list of all tenants in the center",
+        "operationId": "getTenantsByCenterId",
+        "parameters": [
+          {
+            "name": "centerId",
+            "in": "path",
+            "description": "ID of the center",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tenant"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Center not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/centers/{centerId}/tenants/{tenantId}": {
+      "get": {
+        "tags": [
+          "tenant"
+        ],
+        "summary": "Find a single tenant within a center",
+        "operationId": "getTenantById",
+        "parameters": [
+          {
+            "name": "centerId",
+            "in": "path",
+            "description": "ID of the center",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tenantId",
+            "in": "path",
+            "description": "ID of the shop",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Center not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/centers/{centerId}/flats": {
+      "get": {
+        "tags": [
+          "flat"
+        ],
+        "summary": "Get a list of all flats in the center",
+        "operationId": "getFlatsByCenterId",
+        "parameters": [
+          {
+            "name": "centerId",
+            "in": "path",
+            "description": "ID of the center",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Flat"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Center not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/centers/{centerId}/flats/{flatId}": {
+      "get": {
+        "tags": [
+          "flat"
+        ],
+        "summary": "Find a single flat within a center",
+        "operationId": "getCenterFlatById",
+        "parameters": [
+          {
+            "name": "centerId",
+            "in": "path",
+            "description": "ID of the center",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "flatId",
+            "in": "path",
+            "description": "ID of the flat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flat"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Center not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/centers/{centerId}/flats/{flatId}/tenant": {
+      "get": {
+        "tags": [
+          "flat"
+        ],
+        "summary": "Find a single flat within a center",
+        "operationId": "geTenantByFlatId",
+        "parameters": [
+          {
+            "name": "centerId",
+            "in": "path",
+            "description": "ID of the center",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "flatId",
+            "in": "path",
+            "description": "ID of the flat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Center not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/centers/{centerId}/sensors": {
+      "get": {
+        "tags": [
+          "sensor"
+        ],
+        "summary": "Get a list of all sensors in the center",
+        "operationId": "getAllSensorsByCenterId",
+        "parameters": [
+          {
+            "name": "centerId",
+            "in": "path",
+            "description": "ID of the center",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sensor"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Center not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/centers/{centerId}/sensors/{sensorId}": {
+      "get": {
+        "tags": [
+          "sensor"
+        ],
+        "summary": "Find a single shop within a center",
+        "operationId": "getCenterSensorById",
+        "parameters": [
+          {
+            "name": "centerId",
+            "in": "path",
+            "description": "ID of the center",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sensorId",
+            "in": "path",
+            "description": "ID of the sensor",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sensor"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Center not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Center": {
+        "required": [
+          "name",
+          "photoUrls"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "AEZ"
+          },
+          "name": {
+            "type": "string",
+            "example": "Alstertal Einkaufszentrum"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "example": 40000
+          },
+          "sizeFormat": {
+            "type": "string",
+            "example": "m²"
+          },
+          "shopHours": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShopHours"
+            }
+          },
+          "owner": {
+            "type": "string"
+          }
+        }
+      },
+      "ShopHours": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "enum": [
+              "Montag",
+              "Dienstag",
+              "Mittwoch",
+              "Donnerstag",
+              "Freitag",
+              "Samstag",
+              "Sonntag"
+            ]
+          },
+          "open": {
+            "type": "string",
+            "example": "10:00"
+          },
+          "close": {
+            "type": "string",
+            "example": "20:00"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-12-31T23:59:59.999Z"
+          }
+        }
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "street": {
+            "type": "string",
+            "example": "Heegbarg 31"
+          },
+          "zip": {
+            "type": "string",
+            "example": "22391"
+          },
+          "city": {
+            "type": "string",
+            "example": "Hamburg"
+          },
+          "countryCode": {
+            "type": "string",
+            "example": "DE"
+          }
+        }
+      },
+      "Flat": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "AEZ.00.SH.123"
+          },
+          "floor": {
+            "type": "string",
+            "enum": [
+              "UG",
+              "EG",
+              "OG"
+            ]
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "example": 435
+          },
+          "sizeFormat": {
+            "type": "string",
+            "example": "m²"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-12-31T23:59:59.999Z"
+          }
+        }
+      },
+      "Lease": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "flats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Flat"
+            }
+          },
+          "flatKind": {
+            "type": "string",
+            "enum": [
+              "VF",
+              "NF"
+            ]
+          },
+          "quantity": {
+            "type": "number",
+            "example": 125
+          },
+          "quantityKind": {
+            "type": "string",
+            "example": "m²"
+          },
+          "rentPerSq": {
+            "type": "number"
+          },
+          "leaseFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "leaseTo": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Tenant": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "logo": {
+            "$ref": "#/components/schemas/Logo"
+          },
+          "concept": {
+            "$ref": "#/components/schemas/Concept"
+          },
+          "lease": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Lease"
+            }
+          },
+          "kpis": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Period"
+            }
+          }
+        }
+      },
+      "Period": {
+        "type": "object",
+        "properties": {
+          "periodType": {
+            "type": "string",
+            "enum": [
+              "Tag",
+              "Woche",
+              "Monat",
+              "Quartal",
+              "Jahr",
+              "Custom"
+            ]
+          },
+          "periodDesc": {
+            "type": "string",
+            "example": "Q1/2020"
+          },
+          "periodFrom": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "periodTo": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-03-31T23:59:59.999Z"
+          },
+          "kpis": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KPI"
+            }
+          }
+        }
+      },
+      "KPI": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Umsatzmietbelastung in %"
+          },
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string",
+            "example": "€"
+          }
+        }
+      },
+      "Logo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-01-01T00:00:00.000Z"
+          }
+        }
+      },
+      "Concept": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "industry": {
+            "type": "string",
+            "example": "Fashion"
+          },
+          "logo": {
+            "$ref": "#/components/schemas/Logo"
+          }
+        }
+      },
+      "Sensor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "Location": {
+        "type": "object",
+        "properties": {
+          "long": {
+            "type": "number"
+          },
+          "lat": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}
